@@ -7,8 +7,9 @@
 using namespace std;
 
 #define maxn 105
-const char name[] = "CHON";
+const char para[4] = {'C', 'H', 'N', 'O'};
 const double mass[] = {12.01, 1.008, 16.00, 14.01};
+int num[4] = {0, 0, 0, 0};
 double answer[maxn];
 
 int main()
@@ -16,42 +17,45 @@ int main()
     memset(answer, 0, sizeof(answer));
     int kase;
     cin >> kase;
-    for (int i = 0; i < kase; i++)
+    for (int time = 0; time < kase; time++)
     {
-        char c[5];
-        string s;
-        cin >> s;
-        double sum = 0.0, weight = 0.0;
-        int num = 0;
-        for (int i = 0; i < s.size(); i++)
+        char c;
+        int last;
+        while ((c = getchar()) != '\n')
         {
-            if (isalpha(s[i]))
+            if (isalpha(c))
             {
-                for (int j = 0; j < 4; j++)
-                    if (s[i] == name[j])
-                    {
-                        weight = mass[j];
-                        break;
-                    }
-                num = 0;
-                if (isalpha(s[i + 1]) || i + 1 == s.size())
-                    sum += weight;
-                else
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int k = i + 1; k < s.size() && isdigit(s[k]); k++)
-                        c[num++] = s[k];
-                    sum += atof(c) * weight;
+                    if (c == para[i])
+                    {
+                        num[i]++;
+                        last = i;
+                    }
                 }
-                memset(c, '\0', sizeof(c));
             }
             else
-                continue;
+            {
+                int tmp = c - '0';
+                char d;
+                while ((d = getchar()) != '\n')
+                {
+                    if (isalpha(d))
+                    {
+                        ugetc(d, stdin); // 不存在ugetc这个函数？？
+                        break;
+                    }
+                    else
+                        tmp = 10 * tmp + d - '0';
+                }
+                num[last] = num[last] + tmp - 1;
+            }
         }
-        answer[i] = sum;
-    }
-    for (int i = 0; i < kase; i++)
-    {
-        printf("%.3f\n", answer[i]);
+        for (int i = 0; i < 4; i++)
+        {
+            answer[time] += num[i] * mass[i];
+        }
+        printf("%.3f\n", answer[time]);
     }
     return 0;
 }
