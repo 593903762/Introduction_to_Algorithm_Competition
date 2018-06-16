@@ -1,16 +1,27 @@
-/* 尚且有误 */
 #include <stdio.h>
 #include <cstring>
 
 #define BOUND 5
 char grid[BOUND][BOUND];
 
+char readchar()
+{
+    for (;;)
+    {
+        int ch = getchar();
+        if (ch != '\n')
+            return ch;
+    }
+}
+
 int main()
 {
     int x, y, error = 0;
-    for (int i = 0; i < BOUND; i++) {
-        scanf("%c", grid[i]);
-        for (int j = 0; j < BOUND; j++) {
+    for (int i = 0; i < BOUND; i++)
+    {
+        for (int j = 0; j < BOUND; j++)
+        {
+            grid[i][j] = readchar();
             if (grid[i][j] == ' ')
             {
                 x = i;
@@ -19,7 +30,7 @@ int main()
         }
     }
     char ins;
-    while ((ins = getchar()) && ins != '0')
+    while ((ins = readchar()) && ins != '0')
     {
         char tmp;
         switch (ins)
