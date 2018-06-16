@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cmath>
 
-int isPrime(int n)
+int is_prime(int n)
 {
     if (n <= 1)
         return 0;
@@ -24,7 +24,7 @@ int main()
     int n;
     while (scanf("%d", &n) == 1 && n)
     {
-        if (isPrime(n))
+        if (is_prime(n))
             printf("Yes\n");
         else
             printf("No\n");

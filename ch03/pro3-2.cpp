@@ -31,8 +31,7 @@ int main()
                 nums[index] += s[i] - '0' - 1;
         }
         sum += 12.01 * nums[0] + 1.008 * nums[1] +
-               16.00 * nums[2] +
-               14.01 * nums[3];
+               16.00 * nums[2] + 14.01 * nums[3];
         printf("%.3fg/mol\n", sum);
     }
     return 0;

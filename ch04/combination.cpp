@@ -1,6 +1,6 @@
 /*
- * ÊäÈë·Ç¸ºÕûÊýmºÍn£¬¼ÆËã×éºÏÊýC(m,n)
- * Á½¸ö¼¼ÇÉ
+ * è¾“å…¥éžè´Ÿæ•´æ•°må’Œnï¼Œè®¡ç®—ç»„åˆæ•°C(m,n)
+ * ä¸¤ä¸ªæŠ€å·§
  */
 
 #include <cstdio>
