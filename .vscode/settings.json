@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "cstring": "cpp"
+        "*.txt": "plaintext",
+        "cstring": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "algorithm": "cpp",
+        "vector": "cpp"
     }
 }

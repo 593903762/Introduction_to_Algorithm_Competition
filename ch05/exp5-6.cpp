@@ -1,9 +1,15 @@
 #include <cstdio>
-#include <queue>
 #include <map>
+#include <queue>
+
 using namespace std;
 
-const int maxn = 1000 + 10;
+/*
+queueçš„ä½¿ç”¨
+q.front(); q.pop(); q.push(x);
+*/
+
+const int maxn = 1010;
 
 int main()
 {
@@ -11,7 +17,9 @@ int main()
     while (scanf("%d", &t) == 1 && t)
     {
         printf("Scenario #%d\n", ++kase);
-        map<int, int> team; // team[x]±íÊ¾±àºÅÎªxµÄÈËËù¹éÊôµÄÍÅ¶ÓµÄ±àºÅ
+
+        // record the team of each person
+        map<int, int> team;
         for (int i = 0; i < t; i++)
         {
             int n, x;
@@ -23,8 +31,9 @@ int main()
             }
         }
 
-        queue<int> q, q2[maxn]; // ÓÃq´æ´¢ÍÅ¶Ó¶ÓÁĞ£¬q2[i]ÊÇdi¸öÍÅ¶ÓµÄËùÓĞ³ÉÔ±µÄ¶ÓÁĞ
-        for (;;)
+        // æ•´ä½“é˜Ÿåˆ—ä¸å„ä¸ªå›¢é˜Ÿçš„å­é˜Ÿåˆ—
+        queue<int> q, q2[maxn];
+        while (true)
         {
             int x;
             char cmd[10];

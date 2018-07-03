@@ -4,6 +4,7 @@
 using namespace std;
 
 // 从一行字符串中读取用空格分开的数字
+// Attention! string & stringstream are very slow!
 
 int main()
 {
