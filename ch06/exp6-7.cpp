@@ -7,7 +7,7 @@ using namespace std;
 
 const int maxn = 1010;
 char s[maxn];
-bool failed; // 输入数据不可以构建一棵树信号
+bool failed; // 输入数据不可以构建一棵树
 
 // 定义树结点
 struct Node
@@ -25,6 +25,16 @@ Node *root;
 Node *new_node()
 {
     return new Node();
+}
+
+// 消除内存泄漏，但是会产生内存碎片
+void remove_tree(Node *u)
+{
+    if (u == NULL)
+        return;
+    remove_tree(u->left);
+    remove_tree(u->right);
+    delete u;
 }
 
 // 根据输入的字符串位置信息将结点添加至树中正确的位置
@@ -58,6 +68,7 @@ void add_node(int v, char *s)
 bool read_input()
 {
     failed = false;
+    remove_tree(root);
     root = new_node();
     for (;;)
     {
@@ -100,10 +111,8 @@ int main()
 {
     if (read_input())
     {
-        if (!failed)
-        {
+        if (failed)
             printf("-1\n");
-        }
         else
         {
             vector<int> ans;
