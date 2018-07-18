@@ -5,11 +5,12 @@
 
 using namespace std;
 
-const int maxn = 1010;
-char s[maxn];
-bool failed; // 输入数据不可以构建一棵树
+const int maxn = 100010;
 
-// 定义树结点
+/**
+ * 树结构的结构体数组实现（动态+静态）
+ * 借助动态内存池技术，不对内存造成浪费
+ * */
 struct Node
 {
     bool have_value;
@@ -17,33 +18,41 @@ struct Node
     Node *left, *right;
     Node() : have_value(false), left(NULL), right(NULL) {}
 };
-
-// 树根的指针
 Node *root;
 
-// 为新的树结点分配存储空间
+//**内存池技术**
+queue<Node *> freeNode; // 空闲列表
+Node nodes[maxn];
+
+// 将结构体数组中所有空闲的元素位置的指针存入空闲列表
+void init()
+{
+    for (int i = 0; i < maxn; i++)
+        freeNode.push(&nodes[i]);
+}
+
+// 依次从空闲列表中取出空闲位置
 Node *new_node()
 {
-    return new Node();
+    Node *u = freeNode.front();
+    u->left = u->right = NULL;
+    u->have_value = false;
+    freeNode.pop();
+    return u;
 }
 
-// 消除内存泄漏，但是会产生内存碎片
-void remove_tree(Node *u)
+// 将弃置元素的地址回收如空闲列表即可
+void delete_node(Node *u)
 {
-    if (u == NULL)
-        return;
-    remove_tree(u->left);
-    remove_tree(u->right);
-    delete u;
+    freeNode.push(u);
 }
 
-// 根据输入的字符串位置信息将结点添加至树中正确的位置
+bool failed;
 void add_node(int v, char *s)
 {
     int n = strlen(s);
     Node *u = root;
     for (int i = 0; i < n; i++)
-    {
         if (s[i] == 'L')
         {
             if (u->left == NULL)
@@ -56,15 +65,22 @@ void add_node(int v, char *s)
                 u->right = new_node();
             u = u->right;
         }
-    }
-    // 重复赋值，意味着输入信息有误，设置failed信号
     if (u->have_value)
         failed = true;
     u->v = v;
     u->have_value = true;
 }
 
-// 从输入的字符序列中中读取信息并生成一棵树
+void remove_tree(Node *u)
+{
+    if (u == NULL)
+        return;
+    remove_tree(u->left);
+    remove_tree(u->right);
+    delete_node(u);
+}
+
+char s[maxn];
 bool read_input()
 {
     failed = false;
@@ -72,15 +88,13 @@ bool read_input()
     root = new_node();
     for (;;)
     {
-        // 每次读入一个结点的信息，由括号、数字以及位置组成
         if (scanf("%s", s) != 1)
             return false;
+        // strcmp(s1, s2): s1 == s2: return 0; s1 > s2: return 1.
         if (!strcmp(s, "()"))
             break;
         int v;
-        // 从s[1]开始的地址往后读，读出一个整型变量数值
         sscanf(&s[1], "%d", &v);
-        // 逗号字符的下一个字符的地址开始的字符子串
         add_node(v, strchr(s, ',') + 1);
     }
     return true;
@@ -91,7 +105,6 @@ bool bfs(vector<int> &ans)
     queue<Node *> q;
     ans.clear();
     q.push(root);
-    // 借助一个队列即可实现广度优先遍历：每次弹出队首元素之后依次将左右子结点入队
     while (!q.empty())
     {
         Node *u = q.front();
@@ -109,23 +122,24 @@ bool bfs(vector<int> &ans)
 
 int main()
 {
-    if (read_input())
+    vector<int> ans;
+    while (read_input())
     {
+        // failed存在两种可能，其一是：至少存在一个结点被多次赋值
+        // 其二是：至少存在一个结点没有被赋值
+        if (!bfs(ans))
+            failed = true;
         if (failed)
             printf("-1\n");
         else
         {
-            vector<int> ans;
-            if (bfs(ans))
+            for (int i = 0; i < ans.size(); i++)
             {
-                vector<int>::iterator it = ans.begin();
-                while (it != ans.end())
-                {
-                    printf("%d ", *it);
-                    it++;
-                }
-                printf("\n");
+                if (i != 0)
+                    printf(" ");
+                printf("%d", ans[i]);
             }
+            printf("\n");
         }
     }
     return 0;
